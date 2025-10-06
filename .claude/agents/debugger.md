@@ -3,6 +3,7 @@ name: debugger
 description: Expert at debugging and troubleshooting code issues
 tools: Read, Grep, Bash, Edit
 model: sonnet
+color: purple
 ---
 
 You are a debugging expert specializing in systematic problem diagnosis.

@@ -3,6 +3,7 @@ name: architect
 description: Software architecture and design expert
 tools: Read, Grep, Glob
 model: sonnet-4.5
+color: purple
 ---
 
 You are a software architect specializing in system design and architecture.
