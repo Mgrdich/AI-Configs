@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json.schemastore.org/mcp-server-config.json",
+  "mcpServers": {
+    "github": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-github"
+      ],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_PERSONAL_ACCESS_TOKEN}"
+      }
+    },
+    "gitlab-code-review": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "${GITLAB_MCP_PATH:-~/.config/mcp-servers/gitlab-code-review}",
+        "run",
+        "gitlab-code-review"
+      ],
+      "env": {
+        "GITLAB_TOKEN": "${GITLAB_TOKEN}",
+        "GITLAB_HOST": "${GITLAB_HOST:-gitlab.com}",
+        "GITLAB_API_VERSION": "${GITLAB_API_VERSION:-v4}",
+        "LOG_LEVEL": "${LOG_LEVEL:-INFO}"
+      }
+    }
+  }
+}

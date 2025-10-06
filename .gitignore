@@ -1,0 +1,23 @@
+# Backup files created by install script
+*.backup
+
+# Environment variables (NEVER commit these!)
+.env
+.env.local
+
+# Local settings (don't sync these)
+.claude/settings.local.json
+.claude/CLAUDE.local.md
+
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
