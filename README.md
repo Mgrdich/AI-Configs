@@ -223,7 +223,7 @@ Use the architect agent to review the system design
 
 ## 🔗 MCP (Model Context Protocol) Setup
 
-This repository includes MCP server configurations for GitHub and GitLab integration.
+This repository includes MCP server configurations for GitHub, GitLab, Sequential Thinking, and Context7.
 
 ### Prerequisites
 
@@ -236,6 +236,15 @@ This repository includes MCP server configurations for GitHub and GitLab integra
 - Create a Personal Access Token at [GitLab Settings](https://gitlab.com/-/user_settings/personal_access_tokens)
 - Required scopes: `api`, `read_api`
 - Add to `.env`: `GITLAB_TOKEN=glpat-...`
+
+**For Sequential Thinking:**
+- No additional configuration required
+- Provides extended thinking capabilities for complex reasoning tasks
+
+**For Context7:**
+- No additional configuration required
+- Provides up-to-date code documentation and examples
+- Optional API key available for higher rate limits and private repos
 
 ### Installing MCP Servers
 
@@ -259,14 +268,41 @@ source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 uv pip install -r requirements.txt
 ```
 
+**Sequential Thinking MCP Server:**
+```bash
+# Automatically installed via npx when needed
+# No manual installation required
+```
+
+**Context7 MCP Server:**
+```bash
+# Automatically installed via npx when needed
+# No manual installation required
+```
+
 ### Available MCP Commands
 
-Once configured, the `/pr_review` and `/pr_fix` commands will use MCP servers to:
+Once configured, MCP servers provide enhanced capabilities:
+
+**GitHub/GitLab MCP** (used by `/pr_review` and `/pr_fix`):
 - Fetch pull/merge request details
 - Get diff and changes
 - Add review comments
 - Approve/request changes
 - Update PR/MR status
+
+**Sequential Thinking MCP**:
+- Extended reasoning for complex problems
+- Step-by-step problem decomposition
+- Enhanced analytical capabilities
+- Automatic activation for challenging tasks
+
+**Context7 MCP**:
+- Up-to-date code documentation and examples
+- Real-time library documentation retrieval
+- Version-specific code samples
+- Prevents outdated or hallucinated code examples
+- Usage: Add "use context7" to your prompts
 
 ### Environment Variables
 

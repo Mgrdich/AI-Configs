@@ -25,6 +25,20 @@
         "GITLAB_API_VERSION": "${GITLAB_API_VERSION:-v4}",
         "LOG_LEVEL": "${LOG_LEVEL:-INFO}"
       }
+    },
+    "sequential-thinking": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking"
+      ]
+    },
+    "context7": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@upstash/context7-mcp@latest"
+      ]
     }
   }
 }
