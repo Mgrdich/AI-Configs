@@ -8,20 +8,22 @@ This repository contains your custom Claude Code configurations including settin
 .
 ├── .claude/
 │   ├── settings.json      # Global settings (permissions, hooks, models)
-│   ├── CLAUDE.md          # Global instructions for all sessions
 │   ├── commands/          # Custom slash commands
 │   │   ├── commit.md      # Smart commit message generator
 │   │   ├── pr_review.md   # Pull/Merge request reviewer
 │   │   ├── pr_fix.md      # Fix PR review comments
 │   │   ├── review.md      # Code review helper
-│   │   └── test-all.md    # Run all tests
+│   │   ├── test-all.md    # Run all tests
+│   │   └── docs.md        # Documentation generator
 │   └── agents/            # Custom subagents
 │       ├── code-reviewer.md
-│       └── test-writer.md
+│       ├── test-writer.md
+│       ├── debugger.md
+│       └── architect.md
 ├── .mcp.json              # MCP server configuration (GitHub/GitLab)
 ├── .env.example           # Environment variables template
 ├── install.sh             # Installation script (creates symlinks)
-├── update.sh              # Update script (pulls latest changes)
+├── status.sh              # Check configuration status
 └── README.md              # This file
 ```
 
@@ -51,19 +53,16 @@ This will create symlinks from `~/.claude/` to the files in this repository.
 ### What Gets Installed
 
 - **`~/.claude/settings.json`** → Global settings and hooks
-- **`~/.claude/CLAUDE.md`** → Global instructions
 - **`~/.claude/commands/`** → Custom slash commands
 - **`~/.claude/agents/`** → Custom subagents
 
-## 🔄 Updating
+## 🔄 Checking Status
 
-To pull the latest changes from the repository:
+To check the configuration status:
 
 ```bash
-./update.sh
+./status.sh
 ```
-
-Since symlinks are used, changes take effect immediately after pulling.
 
 ## 📝 Configuration Files
 
@@ -73,12 +72,6 @@ Contains:
 - Model preferences
 - Hook configurations
 - Feature flags
-
-### `CLAUDE.md`
-Global instructions that Claude reads at the start of every session. Use this for:
-- Coding standards
-- Preferred patterns
-- Global preferences
 
 ### `commands/`
 Custom slash commands stored as Markdown files.
@@ -144,6 +137,12 @@ You are a test writing expert. When invoked:
 - Analyzes failures
 - Suggests fixes
 
+**`/docs`** - Generate documentation
+- Analyzes codebase structure
+- Identifies undocumented code
+- Generates comprehensive documentation
+- Follows language-specific conventions
+
 ### Usage Examples
 
 ```bash
@@ -158,6 +157,9 @@ You are a test writing expert. When invoked:
 
 # Quick code review
 /review
+
+# Generate documentation
+/docs
 ```
 
 ### Custom Agents
@@ -165,7 +167,15 @@ Agents are invoked automatically by Claude when relevant, or explicitly:
 ```
 Use the test-writer agent to add tests for this function
 Use the code-reviewer agent to review this file
+Use the debugger agent to find and fix this bug
+Use the architect agent to review the system design
 ```
+
+**Available Agents:**
+- **`code-reviewer`** - Expert code reviewer for quality, security, and best practices
+- **`test-writer`** - Writes comprehensive unit and integration tests
+- **`debugger`** - Systematic debugging and troubleshooting expert
+- **`architect`** - Software architecture and design specialist
 
 ## 🔧 Customization
 

@@ -2,8 +2,15 @@
 
 # Claude Code Configuration Installer
 # This script creates symlinks from ~/.claude to this repository
+# Usage: ./install.sh
+#
+# What this script does:
+# 1. Creates ~/.claude directory if it doesn't exist
+# 2. Creates symlinks for settings.json, commands/, and agents/
+# 3. Backs up existing files if they aren't symlinks
+# 4. Enables automatic syncing of configuration changes
 
-set -e
+set -e  # Exit immediately if any command fails
 
 # Colors for output
 RED='\033[0;31m'
@@ -11,7 +18,7 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
-# Get the directory where this script is located
+# Get the directory where this script is located (handles spaces in paths)
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 CLAUDE_DIR="$HOME/.claude"
 REPO_CLAUDE_DIR="$SCRIPT_DIR/.claude"
@@ -26,24 +33,30 @@ if [ ! -d "$CLAUDE_DIR" ]; then
     mkdir -p "$CLAUDE_DIR"
 fi
 
-# Function to create symlink
+# Function to create symlink safely
+# Parameters:
+#   $1 - source: The file/directory in the repository
+#   $2 - target: The destination path in ~/.claude
+#   $3 - name: Human-readable name for logging
 create_symlink() {
     local source="$1"
     local target="$2"
     local name="$3"
 
-    # Check if target already exists
+    # Check if target already exists (file or symlink)
     if [ -e "$target" ] || [ -L "$target" ]; then
         if [ -L "$target" ]; then
+            # Remove existing symlink to replace it
             echo -e "${YELLOW}Removing existing symlink: $target${NC}"
             rm "$target"
         else
+            # Backup existing file/directory to preserve user data
             echo -e "${YELLOW}Backing up existing $name to ${target}.backup${NC}"
             mv "$target" "${target}.backup"
         fi
     fi
 
-    # Create symlink
+    # Create the symlink (-s = symbolic, -f = force)
     ln -sf "$source" "$target"
     echo -e "${GREEN}✓ Linked $name${NC}"
 }
