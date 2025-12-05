@@ -14,7 +14,8 @@ This repository contains your custom Claude Code configurations including settin
 │   │   ├── pr_fix.md      # Fix PR review comments
 │   │   ├── review.md      # Code review helper
 │   │   ├── test-all.md    # Run all tests
-│   │   └── docs.md        # Documentation generator
+│   │   ├── docs.md        # Documentation generator
+│   │   └── repo-research.md # Repository analysis
 │   └── agents/            # Custom subagents
 │       ├── code-reviewer.md
 │       ├── test-writer.md
@@ -143,6 +144,13 @@ You are a test writing expert. When invoked:
 - Generates comprehensive documentation
 - Follows language-specific conventions
 
+**`/repo-research`** - Repository analysis
+- Analyzes languages, frameworks, and tech stack
+- Lists dependencies and their versions
+- Maps project structure and architecture
+- Identifies build tools, testing, and CI/CD setup
+- Flags outdated dependencies and security concerns
+
 ### Usage Examples
 
 ```bash
@@ -160,6 +168,9 @@ You are a test writing expert. When invoked:
 
 # Generate documentation
 /docs
+
+# Analyze repository structure
+/repo-research
 ```
 
 ### Custom Agents
