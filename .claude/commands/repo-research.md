@@ -10,7 +10,7 @@ allowedTools:
 Analyze this repository and provide a comprehensive technical overview including:
 
 1. **Languages & Stack** - Primary and secondary languages, frameworks, and runtime environments
-2. **Dependencies** - External packages, libraries, and their versions (from package.json, requirements.txt, go.mod, Cargo.toml, pom.xml, etc.)
+2. **Dependencies** - External packages, libraries, and their versions (from package.json, requirements.txt, go.mod, Cargo.toml, pom.xml, etc.). For each package, include a brief 1-2 sentence explanation of what it does and why it's used in the project.
 3. **Internal Dependencies** - References to other repositories, git submodules, or workspace packages
 4. **Project Structure** - High-level architecture, key directories, and module organization
 5. **Build & Tooling** - Build systems, bundlers, linters, formatters, and CI/CD configuration
