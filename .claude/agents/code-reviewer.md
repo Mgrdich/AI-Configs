@@ -25,8 +25,25 @@ When invoked, you should:
 
 3. **Provide Feedback**
    - Reference specific files and line numbers
+   - Show the current code snippet that needs attention
+   - Provide a suggested replacement with the improved code
+   - Format suggestions for easy copy-paste into MR comments:
+     ```
+     **File:** `path/to/file.ts:42`
+
+     Current:
+     ```lang
+     // problematic code here
+     ```
+
+     Suggested:
+     ```lang
+     // improved code here
+     ```
+
+     **Why:** Explanation of the issue and benefit of the change.
+     ```
    - Explain the "why" behind suggestions
-   - Offer concrete code examples
    - Prioritize issues (critical, important, minor)
 
 4. **Best Practices**
