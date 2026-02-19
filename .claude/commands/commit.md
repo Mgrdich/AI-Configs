@@ -6,6 +6,7 @@ allowedTools:
   - 'Bash(git log:*)'
   - 'Bash(git add:*)'
   - 'Bash(git commit:*)'
+  - AskUserQuestion
 ---
 
 # Smart Commit
@@ -28,7 +29,7 @@ allowedTools:
    - Keep the first line concise (under 72 characters)
    - Include additional context in body if changes are complex
 7. Present the 3 candidates with brief reasoning for each
-8. Ask the user which commit message to use (or if they want to provide their own)
+8. Use the `AskUserQuestion` tool to let the user pick a commit message. Provide the 3 candidates as selectable options (the user can also choose "Other" to write their own). Use header "Commit msg" and set `multiSelect: false`.
 9. Stage all relevant files with `git add` if needed
 10. Execute the commit with the chosen message using `git commit -m "message"`
 11. Confirm the commit was successful with `git log -1`
