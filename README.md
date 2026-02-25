@@ -9,21 +9,26 @@ This repository contains your custom Claude Code configurations including settin
 ├── .claude/
 │   ├── settings.json      # Global settings (permissions, hooks, models)
 │   ├── commands/          # Custom slash commands
-│   │   ├── commit.md      # Smart commit message generator
-│   │   ├── pr_review.md   # Pull/Merge request reviewer
-│   │   ├── pr_fix.md      # Fix PR review comments
-│   │   ├── review.md      # Code review helper
-│   │   ├── test-all.md    # Run all tests
-│   │   ├── docs.md        # Documentation generator
-│   │   └── repo-research.md # Repository analysis
-│   └── agents/            # Custom subagents
-│       ├── code-reviewer.md
-│       ├── test-writer.md
-│       ├── debugger.md
-│       └── architect.md
+│   │   ├── clean-up-unused.md   # Remove unused code
+│   │   ├── docs.md              # Documentation generator
+│   │   ├── merge-conflict-resolver.md # Resolve merge conflicts
+│   │   ├── pr_fix.md            # Fix PR review comments
+│   │   ├── pr_review.md        # Pull/Merge request reviewer
+│   │   ├── repo-research.md    # Repository analysis
+│   │   ├── review.md           # Code review helper
+│   │   └── test-all.md         # Run all tests
+│   ├── agents/            # Custom subagents
+│   │   ├── architect.md
+│   │   ├── code-reviewer.md
+│   │   ├── debugger.md
+│   │   └── test-writer.md
+│   └── skills/            # Custom skills
+│       └── commit/
+│           └── SKILL.md   # Smart commit message generator
 ├── .mcp.json              # MCP server configuration (GitHub/GitLab)
 ├── .env.example           # Environment variables template
-├── install.sh             # Installation script (creates symlinks)
+├── config.sh              # Shared configuration (sourced by install/status)
+├── install.sh             # Installation script (copies files to targets)
 ├── status.sh              # Check configuration status
 └── README.md              # This file
 ```
@@ -41,7 +46,13 @@ This repository contains your custom Claude Code configurations including settin
 2. Set up environment variables:
    ```bash
    cp .env.example .env
-   # Edit .env and add your API tokens
+   # Edit .env with your API tokens and target directories
+   ```
+
+   Add one or more `CONFIG_SOURCE_DIR` entries pointing to your Claude data directories:
+   ```env
+   CONFIG_SOURCE_DIR=~/.claude-provectus
+   CONFIG_SOURCE_DIR=~/.claude-livenation
    ```
 
 3. Run the install script:
@@ -49,13 +60,14 @@ This repository contains your custom Claude Code configurations including settin
    ./install.sh
    ```
 
-This will create symlinks from `~/.claude/` to the files in this repository.
+This copies commands, agents, skills, and `.mcp.json` from this repo into each target directory listed in `.env`. Stale files that no longer exist in the source are automatically removed.
 
 ### What Gets Installed
 
-- **`~/.claude/settings.json`** → Global settings and hooks
-- **`~/.claude/commands/`** → Custom slash commands
-- **`~/.claude/agents/`** → Custom subagents
+- **`commands/`** → Custom slash commands
+- **`agents/`** → Custom subagents
+- **`skills/`** → Custom skills
+- **`.mcp.json`** → MCP server configuration
 
 ## 🔄 Checking Status
 
@@ -108,13 +120,15 @@ You are a test writing expert. When invoked:
 
 ## 🎯 Usage
 
-### Available Slash Commands
+### Available Skills
 
-**`/commit`** - Intelligent commit message generator
+**`/commit`** - Intelligent commit message generator (skill)
 - Analyzes your repository's commit history
 - Detects and follows existing conventions
 - Generates 3 commit message candidates
 - Interactive selection process
+
+### Available Slash Commands
 
 **`/pr_review [number]`** - Comprehensive PR/MR review
 - Reviews code quality, security, and performance
@@ -137,6 +151,14 @@ You are a test writing expert. When invoked:
 - Executes test suite
 - Analyzes failures
 - Suggests fixes
+
+**`/clean-up-unused`** - Remove unused code
+- Identifies dead code, unused imports, and unreferenced functions
+- Cleans up safely
+
+**`/merge-conflict-resolver`** - Resolve merge conflicts
+- Analyzes conflicting changes
+- Resolves conflicts intelligently
 
 **`/docs`** - Generate documentation
 - Analyzes codebase structure
@@ -319,21 +341,17 @@ Once configured, MCP servers provide enhanced capabilities:
 
 All sensitive data is stored in `.env` (not committed to git). See `.env.example` for all available variables:
 
+- `CONFIG_SOURCE_DIR` - Target Claude data directory (one or more)
 - `GITHUB_PERSONAL_ACCESS_TOKEN` - GitHub API access
 - `GITLAB_TOKEN` - GitLab API access
 - `GITLAB_HOST` - GitLab instance (default: gitlab.com)
 - `LOG_LEVEL` - Logging verbosity (default: INFO)
 
-## 🔗 Symlinks vs. Copying
+## 🔗 How Installation Works
 
-This setup uses **symlinks** by default:
+This setup uses **copy-based installation**. Running `./install.sh` copies managed items from this repo into each target directory configured in `.env`. Running it again overwrites targets with the latest source and removes stale files.
 
-✅ **Pros:**
-- Single source of truth
-- Changes sync automatically
-- Git-tracked
-
-⚠️ **Note:** Don't symlink the `~/.claude/` directory itself (known issue). Symlink individual files/directories inside it instead.
+Shared configuration (colors, paths, managed item lists, `.env` parsing) lives in `config.sh` and is sourced by both `install.sh` and `status.sh`. To manage a new folder or file, add it to the `COPY_DIRS` or `COPY_FILES` array in `config.sh`.
 
 ## 📚 Resources
 
@@ -349,7 +367,7 @@ If you're sharing this with a team:
 1. Fork this repository
 2. Make your changes
 3. Submit a pull request
-4. Run `./update.sh` to get latest changes
+4. Run `./install.sh` to deploy latest changes
 
 ## 📄 License
 

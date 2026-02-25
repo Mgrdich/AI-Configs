@@ -16,20 +16,7 @@
 
 set -e
 
-# Colors for output
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-NC='\033[0m'
-
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-REPO_CLAUDE_DIR="$SCRIPT_DIR/.claude"
-ENV_FILE="$SCRIPT_DIR/.env"
-
-# Items to copy from this repo into each target
-COPY_DIRS=("commands" "agents" "skills")
-COPY_FILES=(".mcp.json")
+source "$(dirname "${BASH_SOURCE[0]}")/config.sh"
 
 echo -e "${GREEN}Claude Code Configuration Installer${NC}"
 echo "========================================"
@@ -43,23 +30,6 @@ fi
 
 echo -e "Source: ${BLUE}$SCRIPT_DIR${NC}"
 echo ""
-
-# --- Load target directories from .env ---
-TARGETS=()
-
-if [ -f "$ENV_FILE" ]; then
-    while IFS='=' read -r key value; do
-        [[ "$key" =~ ^[[:space:]]*# ]] && continue
-        [[ -z "$key" ]] && continue
-
-        key="$(echo "$key" | xargs)"
-        if [ "$key" = "CONFIG_SOURCE_DIR" ]; then
-            value="$(echo "$value" | sed 's/^["'\''"]//;s/["'\''"]$//')"
-            value="${value/#\~/$HOME}"
-            TARGETS+=("$value")
-        fi
-    done < "$ENV_FILE"
-fi
 
 if [ ${#TARGETS[@]} -eq 0 ]; then
     echo -e "${YELLOW}No CONFIG_SOURCE_DIR entries found in .env${NC}"
