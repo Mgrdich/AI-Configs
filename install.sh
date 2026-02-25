@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Claude Code Configuration Installer
-# This script copies commands, agents, and .mcp.json from this repo
+# This script copies commands, agents, skills, and .mcp.json from this repo
 # into each Claude data directory listed in .env.
 # Usage: ./install.sh
 #
@@ -10,7 +10,7 @@
 #
 # What this script does:
 # 1. Reads target directories from .env
-# 2. Copies commands/ and agents/ folders into each target
+# 2. Copies commands/, agents/, and skills/ folders into each target
 # 3. Copies .mcp.json into each target
 # 4. Removes files from target dirs that no longer exist in the source
 
@@ -28,7 +28,7 @@ REPO_CLAUDE_DIR="$SCRIPT_DIR/.claude"
 ENV_FILE="$SCRIPT_DIR/.env"
 
 # Items to copy from this repo into each target
-COPY_DIRS=("commands" "agents")
+COPY_DIRS=("commands" "agents" "skills")
 COPY_FILES=(".mcp.json")
 
 echo -e "${GREEN}Claude Code Configuration Installer${NC}"
@@ -89,7 +89,7 @@ for target in "${TARGETS[@]}"; do
 
     echo -e "${BLUE}Installing to: $target${NC}"
 
-    # Copy directories (commands/, agents/) and remove stale files
+    # Copy directories and remove stale files (supports nested subdirectories)
     for dir in "${COPY_DIRS[@]}"; do
         src="$REPO_CLAUDE_DIR/$dir"
         dest="$target/$dir"
@@ -101,25 +101,28 @@ for target in "${TARGETS[@]}"; do
 
         mkdir -p "$dest"
 
-        # Copy source files to target
-        for file in "$src"/*; do
-            [ -f "$file" ] || continue
-            filename="$(basename "$file")"
-            cp "$file" "$dest/$filename"
-            echo -e "  ${GREEN}✓${NC} $dir/$filename"
+        # Copy source files to target (recursively)
+        while IFS= read -r -d '' file; do
+            rel_path="${file#$src/}"
+            dest_file="$dest/$rel_path"
+            mkdir -p "$(dirname "$dest_file")"
+            cp "$file" "$dest_file"
+            echo -e "  ${GREEN}✓${NC} $dir/$rel_path"
             copy_count=$((copy_count + 1))
-        done
+        done < <(find "$src" -type f -print0)
 
         # Remove files in target that no longer exist in source
-        for file in "$dest"/*; do
-            [ -f "$file" ] || continue
-            filename="$(basename "$file")"
-            if [ ! -f "$src/$filename" ]; then
+        while IFS= read -r -d '' file; do
+            rel_path="${file#$dest/}"
+            if [ ! -f "$src/$rel_path" ]; then
                 rm "$file"
-                echo -e "  ${RED}✗${NC} $dir/$filename (removed)"
+                echo -e "  ${RED}✗${NC} $dir/$rel_path (removed)"
                 remove_count=$((remove_count + 1))
             fi
-        done
+        done < <(find "$dest" -type f -print0)
+
+        # Remove empty directories left behind after stale file cleanup
+        find "$dest" -type d -empty -delete 2>/dev/null || true
     done
 
     # Copy individual files (.mcp.json)

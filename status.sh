@@ -23,7 +23,7 @@ REPO_CLAUDE_DIR="$SCRIPT_DIR/.claude"
 ENV_FILE="$SCRIPT_DIR/.env"
 
 # Items managed by install.sh
-COPY_DIRS=("commands" "agents")
+COPY_DIRS=("commands" "agents" "skills")
 COPY_FILES=(".mcp.json")
 
 echo -e "${GREEN}Claude Code Configuration Status${NC}"
@@ -81,30 +81,28 @@ for target in "${TARGETS[@]}"; do
 
         echo -e "  ${BLUE}$dir/${NC}"
 
-        # Check source files against target
-        for src_file in "$src_dir"/*; do
-            [ -f "$src_file" ] || continue
-            filename="$(basename "$src_file")"
-            dest_file="$dest_dir/$filename"
+        # Check source files against target (recursively)
+        while IFS= read -r -d '' src_file; do
+            rel_path="${src_file#$src_dir/}"
+            dest_file="$dest_dir/$rel_path"
 
             if [ ! -f "$dest_file" ]; then
-                echo -e "    ${RED}✗${NC} $filename (missing)"
+                echo -e "    ${RED}✗${NC} $rel_path (missing)"
             elif diff -q "$src_file" "$dest_file" >/dev/null 2>&1; then
-                echo -e "    ${GREEN}✓${NC} $filename (up to date)"
+                echo -e "    ${GREEN}✓${NC} $rel_path (up to date)"
             else
-                echo -e "    ${YELLOW}~${NC} $filename (differs from source)"
+                echo -e "    ${YELLOW}~${NC} $rel_path (differs from source)"
             fi
-        done
+        done < <(find "$src_dir" -type f -print0 | sort -z)
 
         # Check for orphaned files in target that don't exist in source
         if [ -d "$dest_dir" ]; then
-            for dest_file in "$dest_dir"/*; do
-                [ -f "$dest_file" ] || continue
-                filename="$(basename "$dest_file")"
-                if [ ! -f "$src_dir/$filename" ]; then
-                    echo -e "    ${RED}!${NC} $filename (orphaned — not in source)"
+            while IFS= read -r -d '' dest_file; do
+                rel_path="${dest_file#$dest_dir/}"
+                if [ ! -f "$src_dir/$rel_path" ]; then
+                    echo -e "    ${RED}!${NC} $rel_path (orphaned — not in source)"
                 fi
-            done
+            done < <(find "$dest_dir" -type f -print0 | sort -z)
         fi
     done
 
