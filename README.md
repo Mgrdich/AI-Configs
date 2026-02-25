@@ -25,7 +25,7 @@ This repository contains your custom Claude Code configurations including settin
 │   └── skills/            # Custom skills
 │       └── commit/
 │           └── SKILL.md   # Smart commit message generator
-├── .mcp.json              # MCP server configuration (GitHub/GitLab)
+├── .mcp.json              # MCP server configuration
 ├── .env.example           # Environment variables template
 ├── config.sh              # Shared configuration (sourced by install/status)
 ├── install.sh             # Installation script (copies files to targets)
@@ -133,8 +133,6 @@ You are a test writing expert. When invoked:
 **`/pr_review [number]`** - Comprehensive PR/MR review
 - Reviews code quality, security, and performance
 - Provides categorized feedback (Critical, High, Medium, Low)
-- Can post comments directly to GitHub/GitLab
-- Requires MCP servers configured
 
 **`/pr_fix [number]`** - Fix PR/MR review comments
 - Fetches all review comments
@@ -256,96 +254,22 @@ Use the architect agent to review the system design
 
 ## 🔗 MCP (Model Context Protocol) Setup
 
-This repository includes MCP server configurations for GitHub, GitLab, Sequential Thinking, and Context7.
+This repository includes MCP server configurations for Sequential Thinking and Context7.
 
-### Prerequisites
-
-**For GitHub:**
-- Create a Personal Access Token at [GitHub Settings](https://github.com/settings/tokens)
-- Required scopes: `repo`, `read:org`, `read:user`
-- Add to `.env`: `GITHUB_PERSONAL_ACCESS_TOKEN=ghp_...`
-
-**For GitLab:**
-- Create a Personal Access Token at [GitLab Settings](https://gitlab.com/-/user_settings/personal_access_tokens)
-- Required scopes: `api`, `read_api`
-- Add to `.env`: `GITLAB_TOKEN=glpat-...`
-
-**For Sequential Thinking:**
+**Sequential Thinking:**
 - No additional configuration required
 - Provides extended thinking capabilities for complex reasoning tasks
 
-**For Context7:**
+**Context7:**
 - No additional configuration required
 - Provides up-to-date code documentation and examples
 - Optional API key available for higher rate limits and private repos
-
-### Installing MCP Servers
-
-**GitHub MCP Server:**
-```bash
-# Automatically installed via npx when needed
-# No manual installation required
-```
-
-**GitLab MCP Server:**
-```bash
-# Clone the GitLab MCP server
-mkdir -p ~/.config/mcp-servers
-cd ~/.config/mcp-servers
-git clone https://github.com/mehmetakinn/gitlab-mcp-code-review.git
-cd gitlab-mcp-code-review
-
-# Install dependencies
-uv venv
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-uv pip install -r requirements.txt
-```
-
-**Sequential Thinking MCP Server:**
-```bash
-# Automatically installed via npx when needed
-# No manual installation required
-```
-
-**Context7 MCP Server:**
-```bash
-# Automatically installed via npx when needed
-# No manual installation required
-```
-
-### Available MCP Commands
-
-Once configured, MCP servers provide enhanced capabilities:
-
-**GitHub/GitLab MCP** (used by `/pr_review` and `/pr_fix`):
-- Fetch pull/merge request details
-- Get diff and changes
-- Add review comments
-- Approve/request changes
-- Update PR/MR status
-
-**Sequential Thinking MCP**:
-- Extended reasoning for complex problems
-- Step-by-step problem decomposition
-- Enhanced analytical capabilities
-- Automatic activation for challenging tasks
-
-**Context7 MCP**:
-- Up-to-date code documentation and examples
-- Real-time library documentation retrieval
-- Version-specific code samples
-- Prevents outdated or hallucinated code examples
-- Usage: Add "use context7" to your prompts
 
 ### Environment Variables
 
 All sensitive data is stored in `.env` (not committed to git). See `.env.example` for all available variables:
 
 - `CONFIG_SOURCE_DIR` - Target Claude data directory (one or more)
-- `GITHUB_PERSONAL_ACCESS_TOKEN` - GitHub API access
-- `GITLAB_TOKEN` - GitLab API access
-- `GITLAB_HOST` - GitLab instance (default: gitlab.com)
-- `LOG_LEVEL` - Logging verbosity (default: INFO)
 
 ## 🔗 How Installation Works
 
