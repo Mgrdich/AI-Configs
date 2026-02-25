@@ -31,10 +31,11 @@ allowedTools:
 7. Present the 3 candidates with brief reasoning for each
 8. Use the `AskUserQuestion` tool to let the user pick a commit message. Provide the 3 candidates as selectable options (the user can also choose "Other" to write their own). Use header "Commit msg" and set `multiSelect: false`.
 9. Stage all relevant files with `git add` if needed
-10. Execute the commit with the chosen message using `git commit -m "message"`
-    - By default, append a `Co-Authored-By: Claude <noreply@anthropic.com>` footer to the commit message
-    - If the argument `$ARGUMENTS` contains "no", do NOT add the co-authorship footer
-11. Confirm the commit was successful with `git log -1`
+10. Use the `AskUserQuestion` tool to ask: "Add Co-Authored-By: Claude footer?" with header "Co-author" and `multiSelect: false`. Provide two options: "Yes" (description: "Append Co-Authored-By: Claude <noreply@anthropic.com> to the commit message") and "No" (description: "Commit without co-author footer").
+11. Execute the commit with the chosen message using `git commit -m "message"`
+    - If the user selected "Yes" in step 10, append a `Co-Authored-By: Claude <noreply@anthropic.com>` footer to the commit message
+    - If the user selected "No", do NOT add the co-authorship footer
+12. Confirm the commit was successful with `git log -1`
 
 **Important Notes:**
 - Respect the repository's existing conventions over general best practices
