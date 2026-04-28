@@ -23,8 +23,10 @@ This repository contains your custom Claude Code configurations including settin
 │   │   ├── debugger.md
 │   │   └── test-writer.md
 │   └── skills/            # Custom skills
-│       └── commit/
-│           └── SKILL.md   # Smart commit message generator
+│       ├── commit/
+│       │   └── SKILL.md   # Smart commit message generator
+│       └── open-github-mr/
+│           └── SKILL.md   # Project-agnostic GitHub PR opener
 ├── .mcp.json              # MCP server configuration
 ├── .env.example           # Environment variables template
 ├── config.sh              # Shared configuration (sourced by install/status)
@@ -127,6 +129,12 @@ You are a test writing expert. When invoked:
 - Detects and follows existing conventions
 - Generates 3 commit message candidates
 - Interactive selection process
+
+**`/open-github-pr`** - Project-agnostic GitHub PR opener (skill)
+- Detects the default branch, package manager, and CI gates from the repo
+- Optionally runs lint / format / typecheck / build / test locally before opening
+- Learns the project's PR voice from recent merged PRs
+- Drafts title and body, confirms with you, then opens via `gh pr create`
 
 ### Available Slash Commands
 
