@@ -25,8 +25,11 @@ This repository contains your custom Claude Code configurations including settin
 │   └── skills/            # Custom skills
 │       ├── commit/
 │       │   └── SKILL.md   # Smart commit message generator
-│       └── open-github-mr/
-│           └── SKILL.md   # Project-agnostic GitHub PR opener
+│       └── github-cli/
+│           ├── SKILL.md   # Routing + shared rules for `gh` workflows
+│           └── references/
+│               ├── issue.md  # Standard for opening a GitHub issue
+│               └── pr.md     # Standard for opening a GitHub PR
 ├── .mcp.json              # MCP server configuration
 ├── .env.example           # Environment variables template
 ├── config.sh              # Shared configuration (sourced by install/status)
@@ -130,11 +133,12 @@ You are a test writing expert. When invoked:
 - Generates 3 commit message candidates
 - Interactive selection process
 
-**`/open-github-pr`** - Project-agnostic GitHub PR opener (skill)
+**`/github-cli`** - Project-agnostic GitHub issue + PR opener (skill)
+- Single entry point that routes to either the issue or PR workflow
 - Detects the default branch, package manager, and CI gates from the repo
-- Optionally runs lint / format / typecheck / build / test locally before opening
-- Learns the project's PR voice from recent merged PRs
-- Drafts title and body, confirms with you, then opens via `gh pr create`
+- Optionally runs lint / format / typecheck / build / test before opening a PR
+- Learns the project's voice from recent issues and merged PRs
+- Drafts title and body, confirms with you, then opens via `gh issue create` / `gh pr create`
 
 ### Available Slash Commands
 
