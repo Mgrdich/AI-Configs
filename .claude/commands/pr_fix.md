@@ -20,11 +20,19 @@ This command addresses review comments and issues found in a pull request or mer
 - `/pr_fix <PR/MR number>` - Fix issues in specific PR/MR
 - `/pr_fix` - Fix issues in current branch's PR/MR
 
+## Routing
+
+**For GitHub repositories, prefer the `github-cli` skill** instead of running these steps. The skill has a curated GitHub-only workflow at `references/fix.md` that handles inline thread fetching, the three-tier fix categorization, and per-comment commit messages. To use it: invoke the Skill tool with `skill: github-cli`, then follow its routing to `references/fix.md`.
+
+The steps below remain the canonical path for **GitLab** (`glab`) and as a fallback when the `github-cli` skill is unavailable.
+
 ## Steps
 
 1. Detect platform (GitHub or GitLab):
    - Check git remote URL
    - Set appropriate CLI tool (gh or glab)
+   - **If the remote is GitHub** (github.com): invoke the `github-cli` skill via the Skill tool and stop. Do not continue with the steps below — the skill handles the GitHub flow end-to-end.
+   - **If the remote is GitLab** (gitlab.com): continue with the steps below using `glab`.
 
 2. Get PR/MR details:
    - If number provided, fetch that specific PR/MR

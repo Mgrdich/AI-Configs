@@ -15,11 +15,19 @@ This command performs a comprehensive code review of a pull request or merge req
 - `/pr_review <PR/MR number>` - Review specific PR/MR
 - `/pr_review` - Review current branch's PR/MR
 
+## Routing
+
+**For GitHub repositories, prefer the `github-cli` skill** instead of running these steps. The skill has a curated GitHub-only workflow at `references/review.md` that produces tighter, project-aware reviews. To use it: invoke the Skill tool with `skill: github-cli`, then follow its routing to `references/review.md`.
+
+The steps below remain the canonical path for **GitLab** (`glab`) and as a fallback when the `github-cli` skill is unavailable.
+
 ## Steps
 
 1. Detect which platform is being used (GitHub or GitLab):
    - Check git remote URL for github.com or gitlab.com
    - Set appropriate CLI tool (gh or glab)
+   - **If the remote is GitHub** (github.com): invoke the `github-cli` skill via the Skill tool and stop. Do not continue with the steps below — the skill handles the GitHub flow end-to-end.
+   - **If the remote is GitLab** (gitlab.com): continue with the steps below using `glab`.
 
 2. Get PR/MR details:
    - If number provided, fetch that specific PR/MR

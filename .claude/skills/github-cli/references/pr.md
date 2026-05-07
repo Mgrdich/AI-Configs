@@ -219,75 +219,40 @@ Conventional-commit style — match this register *only if* recent PRs do:
 If the project doesn't use conventional commits, follow whatever style
 the last few merged PRs use.
 
-## Body templates by toolchain
+## Body template
 
-Same shape, different commands. The Test plan must show the *actual*
-commands you ran — never copy these verbatim if they don't match the repo.
-
-**Node (pnpm):**
+The body has the same shape regardless of toolchain — Summary, Test
+plan, and optional Docs. Only the Test plan commands change to reflect
+what Step 3 actually ran on this repo.
 
 ```markdown
 ## Summary
 
-Adds SSO login via OIDC. Closes #142.
+<one-sentence framing of what was built and the problem it solves.
+Reference the issue or ticket if there is one — `Closes #142`.>
 
-- **Provider:** Auth0; configurable via `OIDC_ISSUER` env var.
-- **Routes:** `/auth/login` and `/auth/callback` added to the auth router.
+- **<Label>:** <major change, bolded-label style if recent PRs use it>
+- **<Label>:** <next major change>
 
 ## Test plan
 
-- [x] `pnpm lint` — clean
-- [x] `pnpm typecheck` — clean
-- [x] `pnpm test` — 412/412 passing
-- [x] Manual: logged in via Auth0 dev tenant, confirmed redirect.
+- [x] `<gate-1 command>` — <result, e.g. clean / N/N passing / succeeds>
+- [x] `<gate-2 command>` — <result>
+- [x] `<gate-N command>` — <result>
+- [x] Manual: <only if you actually performed manual verification>
+
+## Docs *(only if user-facing docs changed)*
+
+- `<path>` — <what changed and why>
 
 🤖 Generated with [Claude Code](https://claude.com/claude-code)
 ```
 
-**Rust:**
-
-```markdown
-## Test plan
-
-- [x] `cargo fmt --check` — clean
-- [x] `cargo clippy -- -D warnings` — clean
-- [x] `cargo build --release` — succeeds
-- [x] `cargo test` — 87/87 passing
-```
-
-**Go:**
-
-```markdown
-## Test plan
-
-- [x] `gofmt -l .` — clean
-- [x] `go vet ./...` — clean
-- [x] `go build ./...` — succeeds
-- [x] `go test ./...` — ok (143 tests)
-```
-
-**Python (uv + ruff + pytest):**
-
-```markdown
-## Test plan
-
-- [x] `ruff check` — clean
-- [x] `ruff format --check` — clean
-- [x] `mypy src/` — clean
-- [x] `pytest` — 256 passed
-```
-
-**Make-based / mixed:**
-
-```markdown
-## Test plan
-
-- [x] `make lint` — clean
-- [x] `make test` — 91/91 passing
-```
-
-The Summary section is the same shape regardless of toolchain — only the
-Test plan commands change to match what Step 3 actually ran.
+Fill the Test plan with the literal commands you ran in Step 3 — never
+the placeholder names above. Don't invent gates the project doesn't
+have. If recent PRs follow a different section convention (e.g. they
+use `## Why` instead of `## Summary`, or omit `## Test plan` entirely),
+mirror that — Step 5's voice-matching wins over this template.
 
 ## What NOT to do
 
